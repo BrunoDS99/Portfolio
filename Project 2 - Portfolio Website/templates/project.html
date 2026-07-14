@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }} | Bruno{% endblock %}
+
+{% block content %}
+
+<section id="wrapper">
+
+    <header>
+        <div class="inner">
+            <h2>{{ project.title }}</h2>
+            <p>{{ project.short_description }}</p>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <div class="inner">
+
+            <span class="image fit">
+                <img src="{{ url_for('static', filename=project.image) }}"
+                     alt="{{ project.title }}">
+            </span>
+
+            <h3 class="major">Overview</h3>
+
+            <p>
+                {{ project.long_description }}
+            </p>
+
+            <h3 class="major">Status</h3>
+
+            <p>{{ project.status }}</p>
+
+            <h3 class="major">Difficulty</h3>
+
+            <p>{{ project.difficulty }}</p>
+
+            <h3 class="major">Technologies Used</h3>
+
+            <ul>
+                {% for tech in project.technologies %}
+                <li>{{ tech }}</li>
+                {% endfor %}
+            </ul>
+
+            <h3 class="major">Features</h3>
+
+            <ul>
+                {% for feature in project.features %}
+                <li>{{ feature }}</li>
+                {% endfor %}
+            </ul>
+
+            <ul class="actions">
+
+                <li>
+                    <a href="{{ project.github }}"
+                       class="button primary"
+                       target="_blank">
+                        View on GitHub
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('projects') }}"
+                       class="button">
+                        Back to Projects
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

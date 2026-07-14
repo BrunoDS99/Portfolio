@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Contact | Bruno{% endblock %}
+
+{% block content %}
+
+<section id="wrapper">
+
+    <header>
+        <div class="inner">
+            <h2>Contact</h2>
+            <p>Let's connect.</p>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <div class="inner">
+
+            <p>
+                If you'd like to discuss a project, collaborate, or simply get in
+                touch, feel free to contact me using any of the methods below.
+            </p>
+
+            <section>
+
+                <h3 class="major">Contact Information</h3>
+
+                <ul class="contact">
+
+                    <li class="icon solid fa-envelope">
+                        your@email.com
+                    </li>
+
+                    <li class="icon brands fa-github">
+                        github.com/yourusername
+                    </li>
+
+                    <li class="icon brands fa-linkedin">
+                        linkedin.com/in/yourusername
+                    </li>
+
+                </ul>
+
+            </section>
+
+            <section>
+
+                <h3 class="major">Send a Message</h3>
+
+                <form method="post">
+
+                    <div class="fields">
+
+                        <div class="field">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="name">
+                        </div>
+
+                        <div class="field">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" id="email">
+                        </div>
+
+                        <div class="field">
+                            <label for="message">Message</label>
+                            <textarea name="message"
+                                      id="message"
+                                      rows="6"></textarea>
+                        </div>
+
+                    </div>
+
+                    <ul class="actions">
+                        <li>
+                            <input type="submit" value="Send Message">
+                        </li>
+                    </ul>
+
+                </form>
+
+            </section>
+
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

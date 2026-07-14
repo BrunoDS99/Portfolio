@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Bruno{% endblock %}
+
+{% block content %}
+
+<!-- Banner -->
+<section id="banner">
+    <div class="inner">
+        <div class="logo">
+            <span class="icon fa-gem"></span>
+        </div>
+
+        <h2>Bruno</h2>
+
+        <p>
+            Python Developer focused on automation, web development and creating
+            practical software solutions.
+        </p>
+
+        <a href="{{ url_for('projects') }}" class="special">
+            View My Projects
+        </a>
+    </div>
+</section>
+
+<!-- Wrapper -->
+<section id="wrapper">
+
+    <!-- About -->
+    <section id="one" class="wrapper spotlight style1">
+        <div class="inner">
+
+            <img class="image"
+                 src="{{ url_for('static', filename='images/profile.png') }}"
+                 alt="Bruno">
+
+            <div class="content">
+
+                <h2 class="major">About Me</h2>
+
+                <p>
+                    I'm Bruno, a Python developer passionate about building
+                    practical software that solves real-world problems.
+                    My interests include object-oriented programming,
+                    automation, Flask development, APIs and
+                    database-driven applications.
+                </p>
+
+                <a href="{{ url_for('about') }}" class="special">
+                    Read More
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Project -->
+    <section id="two" class="wrapper alt spotlight style2">
+        <div class="inner">
+
+            <img class="image"
+                 src="{{ url_for('static', filename='images/morse.png') }}"
+                 alt="Morse Code Translator">
+
+            <div class="content">
+
+                <h2 class="major">Featured Project</h2>
+
+                <p>
+                    An object-oriented Morse Code Translator built in Python
+                    using modular architecture, CSV mappings and
+                    file handling.
+                </p>
+
+                <a href="{{ url_for('projects') }}" class="special">
+                    Learn More
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Project -->
+    <section id="three" class="wrapper spotlight style3">
+        <div class="inner">
+
+            <img class="image"
+                 src="{{ url_for('static', filename='images/pic03.jpg') }}"
+                 alt="Portfolio Website">
+
+            <div class="content">
+
+                <h2 class="major">Portfolio Website</h2>
+
+                <p>
+                    A responsive portfolio developed with Flask,
+                    Jinja templates and modern web technologies.
+                </p>
+
+                <a href="{{ url_for('projects') }}" class="special">
+                    Learn More
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="four" class="wrapper alt style1">
+        <div class="inner">
+
+            <h2 class="major">Python Projects</h2>
+
+            <p>
+                A collection of projects demonstrating software engineering,
+                automation, APIs, databases and object-oriented programming.
+            </p>
+
+            <section class="features">
+
+                <article>
+
+                    <img class="image"
+                         src="{{ url_for('static', filename='images/pic04.jpg') }}"
+                         alt="Morse Translator">
+
+                    <h3 class="major">Morse Code Translator</h3>
+
+                    <p>
+                        Encode and decode Morse code using a modular,
+                        object-oriented architecture.
+                    </p>
+
+                    <a href="#" class="special">View Project</a>
+
+                </article>
+
+                <article>
+
+                    <img class="image"
+                         src="{{ url_for('static', filename='images/pic05.jpg') }}"
+                         alt="Password Manager">
+
+                    <h3 class="major">Password Manager</h3>
+
+                    <p>
+                        Secure password manager built with Python and
+                        persistent storage.
+                    </p>
+
+                    <a href="#" class="special">View Project</a>
+
+                </article>
+
+                <article>
+
+                    <img class="image"
+                         src="{{ url_for('static', filename='images/pic06.jpg') }}"
+                         alt="Weather App">
+
+                    <h3 class="major">Weather App</h3>
+
+                    <p>
+                        Weather application consuming a public API
+                        and displaying live forecast data.
+                    </p>
+
+                    <a href="#" class="special">View Project</a>
+
+                </article>
+
+                <article>
+
+                    <img class="image"
+                         src="{{ url_for('static', filename='images/pic07.jpg') }}"
+                         alt="Expense Tracker">
+
+                    <h3 class="major">Expense Tracker</h3>
+
+                    <p>
+                        Desktop application for managing expenses
+                        with persistent data storage.
+                    </p>
+
+                    <a href="#" class="special">View Project</a>
+
+                </article>
+
+            </section>
+
+            <ul class="actions">
+                <li>
+                    <a href="{{ url_for('projects') }}" class="button">
+                        Browse All Projects
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </section>
+
+</section>
+
+{% endblock %}

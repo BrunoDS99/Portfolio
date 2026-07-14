@@ -1,0 +1,48 @@
+[
+    {
+        "slug": "morse-code-translator",
+        "title": "Morse Code Translator",
+        "short_description": "Encode and decode Morse code.",
+        "long_description": "A Python application designed with object-oriented principles, modular architecture, CSV mappings, validation, and file handling.",
+        "image": "images/morse.png",
+        "status": "Completed",
+        "difficulty": "Intermediate",
+        "technologies": [
+            "Python",
+            "CSV",
+            "OOP",
+            "File Handling"
+        ],
+        "features": [
+            "Encoding",
+            "Decoding",
+            "CSV mappings",
+            "File input/output",
+            "Validation"
+        ],
+        "github": "https://github.com/yourusername/morse-code-translator"
+    },
+
+    {
+        "slug": "portfolio-website",
+        "title": "Portfolio Website",
+        "short_description": "Personal portfolio built with Flask.",
+        "long_description": "A responsive portfolio website using Flask, Jinja templates and JSON-driven content.",
+        "image": "images/profile.png",
+        "status": "In Progress",
+        "difficulty": "Intermediate",
+        "technologies": [
+            "Python",
+            "Flask",
+            "Jinja",
+            "HTML",
+            "CSS"
+        ],
+        "features": [
+            "Dynamic routing",
+            "JSON project database",
+            "Responsive layout"
+        ],
+        "github": "https://github.com/yourusername/portfolio"
+    }
+]

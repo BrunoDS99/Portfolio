@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>{% block title %}Bruno | Python Developer{% endblock %}</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="author" content="Bruno">
+
+    <meta name="description"
+          content="Python Developer portfolio showcasing automation, Flask applications and software engineering projects.">
+
+    <meta name="keywords"
+          content="Python, Flask, Portfolio, Automation, APIs, SQLite, Git">
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='assets/css/main.css') }}">
+
+    <noscript>
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='assets/css/noscript.css') }}">
+    </noscript>
+
+    {% block extra_css %}{% endblock %}
+
+</head>
+
+<body class="is-preload">
+
+    <div id="page-wrapper">
+
+        <!-- Header -->
+        <header id="header" class="alt">
+
+            <h1>
+                <a href="{{ url_for('home') }}">Bruno</a>
+            </h1>
+
+            <nav>
+                <a href="#menu">Menu</a>
+            </nav>
+
+        </header>
+
+        <!-- Menu -->
+        <nav id="menu">
+
+            <div class="inner">
+
+                <h2>Menu</h2>
+
+                <ul class="links">
+
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+
+                    <li><a href="{{ url_for('projects') }}">Projects</a></li>
+
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+
+                </ul>
+
+                <a href="#" class="close">Close</a>
+
+            </div>
+
+        </nav>
+
+        <!-- Page Content -->
+        {% block content %}
+        {% endblock %}
+
+        <!-- Footer -->
+        <section id="footer">
+
+            <div class="inner">
+
+                <h2 class="major">Contact Me</h2>
+
+                <p>
+                    Interested in collaborating or have a question?
+                    Feel free to get in touch.
+                </p>
+
+                <ul class="contact">
+
+                    <li class="icon solid fa-envelope">
+                        your@email.com
+                    </li>
+
+                    <li class="icon brands fa-github">
+                        github.com/yourusername
+                    </li>
+
+                    <li class="icon brands fa-linkedin">
+                        linkedin.com/in/yourusername
+                    </li>
+
+                </ul>
+
+                <ul class="copyright">
+                    <li>&copy; 2026 Bruno. All rights reserved.</li>
+                </ul>
+
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='assets/js/jquery.scrollex.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='assets/js/browser.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='assets/js/breakpoints.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+    {% block extra_js %}
+    {% endblock %}
+
+</body>
+
+</html>

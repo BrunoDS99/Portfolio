@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Projects | Bruno{% endblock %}
+
+{% block content %}
+
+<section id="wrapper">
+
+    <header>
+        <div class="inner">
+            <h2>Projects</h2>
+            <p>Browse the software projects I've built while learning Python and backend development.</p>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <div class="inner">
+
+            <section class="features">
+
+                {% for project in projects %}
+
+                <article>
+
+                    <a href="{{ url_for('project', slug=project.slug) }}" class="image">
+                        <img src="{{ url_for('static', filename=project.image) }}"
+                             alt="{{ project.title }}">
+                    </a>
+
+                    <h3 class="major">{{ project.title }}</h3>
+
+                    <p>{{ project.short_description }}</p>
+
+                    <p>
+                        <strong>Status:</strong> {{ project.status }}<br>
+                        <strong>Difficulty:</strong> {{ project.difficulty }}
+                    </p>
+
+                    <p>
+
+                        {% for tech in project.technologies %}
+
+                            <span class="button small">{{ tech }}</span>
+
+                        {% endfor %}
+
+                    </p>
+
+                    <ul class="actions">
+
+                        <li>
+                            <a href="{{ url_for('project', slug=project.slug) }}"
+                               class="button">
+                                View Details
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ project.github }}"
+                               target="_blank"
+                               class="button">
+                                GitHub
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </article>
+
+                {% endfor %}
+
+            </section>
+
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}
