@@ -35,8 +35,13 @@ def add_text_watermark(image_path, output_path, settings):
     elif settings.position == "top_left":
         position = (20, 20)
         
+    elif settings.position == "top_right":
+        position = (
+            image.width - text_width - 20, 
+            20)
+        
     else:
-        position (20, 20)
+        position = (20, 20)
         
         
     draw.text(
@@ -63,38 +68,44 @@ def load_image(image_path):
         print("Error loading image: {e}")
         
 def add_logo_watermark(image_path, logo_path, output_path, settings):
+    # Open images
     image = Image.open(image_path).convert("RGBA")
     logo = Image.open(logo_path).convert("RGBA")
     
-    alpha = logo.getchannel("A")
-    alpha = alpha.point(lambda p: int(p * settings.logo_opacity))
-    logo.putalpha(alpha)
-    
-    #Resize Logo
+    # Calculate new size based on logo_scale from settings
     new_width = int(image.width * settings.logo_scale)
-    ratio = new_width/logo.width
+    ratio = new_width / logo.width
+    new_height = int(logo.height * ratio)
+    logo = logo.resize((new_width, new_height))
     
-    new_heigth = int(logo.height * ratio)
-    logo = logo.resize(
-        (new_width, new_heigth)
-    )
+    # Apply opacity to the resized logo
+    if logo.mode == 'RGBA':
+        # Split the logo into RGB and Alpha channels
+        r, g, b, a = logo.split()
+        # Apply opacity to alpha channel
+        a = a.point(lambda p: int(p * settings.opacity / 255))
+        # Merge back
+        logo = Image.merge('RGBA', (r, g, b, a))
     
-    #calculate position
+    # Position the logo
     if settings.position == "bottom_right":
         position = (
             image.width - logo.width - 20,
             image.height - logo.height - 20
         )
     elif settings.position == "top_left":
-        
+        position = (20, 20)
+    elif settings.position == "top_right":
         position = (
-            20,
+            image.width - logo.width - 20,
             20
         )
+    elif settings.position == "bottom_left":
+        position = (20, image.height - logo.height - 20)
+    else:
+        position = (20, 20)  # Default to top-left
     
-    image.alpha_composite(
-        logo,
-        position
-    )
-    
+    # Composite the logo onto the image
+    image.alpha_composite(logo, position)
     image.convert("RGB").save(output_path)
+    print(f"Logo watermark applied with opacity: {settings.opacity}")
