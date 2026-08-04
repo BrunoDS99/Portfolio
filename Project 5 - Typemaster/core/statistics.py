@@ -33,3 +33,10 @@ class Statistics:
             return 0
         minutes = elapsed_seconds / 60
         return round((self.correct_characters / 5) / minutes)
+    
+    @property
+    def words(self):
+        return self.correct_characters // 5
+    @property
+    def characters(self):
+        return self.correct_characters

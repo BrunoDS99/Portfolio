@@ -1,29 +1,43 @@
 import tkinter as tk
 
-from config.settings import (BACKGROUND_COLOR, TEXT_COLOR, FONT_FAMILY, MAIN_FONT_SIZE)
+from config.settings import (BACKGROUND_COLOR, CARD_COLOR, CORRECT_COLOR, CURRENT_COLOR, ERROR_COLOR, PRIMARY_TEXT, TEXT_COLOR, FONT_FAMILY, MAIN_FONT_SIZE, TEXT_FONT)
 
 class TypingDisplay:
     def __init__(self, parent):
         
-        self.text_widget = tk.Text(
-            parent,
-            wrap="word",
-            height=5,
-            width=60,
-            background=BACKGROUND_COLOR,
-            foreground=TEXT_COLOR,
-            font = (FONT_FAMILY, MAIN_FONT_SIZE),
-            borderwidth=0,
-            highlightthickness=0
+        self.card = tk.Frame(
+        parent,
+        bg=CARD_COLOR,
+        padx=30,
+        pady=30
+        )
+
+        self.card.pack(
+        fill="x",
+        pady=20
         )
         
-        self.text_widget.pack(padx=50, pady=80)
+        self.text_widget = tk.Text(
+        self.card,
+        wrap="word",
+        height=5,
+        width=50,
+        bg=CARD_COLOR,
+        fg=PRIMARY_TEXT,
+        insertbackground=PRIMARY_TEXT,
+        relief="flat",
+        bd=0,
+        highlightthickness=0,
+        font=TEXT_FONT
+    )
+
+        self.text_widget.pack(fill="both")
         self.configure_tags()
         
     def configure_tags(self):
-        self.text_widget.tag_configure("correct", foreground="#808080")
-        self.text_widget.tag_configure("wrong", foreground="#FF4444")
-        self.text_widget.tag_configure("current", underline=True)
+        self.text_widget.tag_configure("correct", foreground=CORRECT_COLOR)
+        self.text_widget.tag_configure("wrong", foreground=ERROR_COLOR)
+        self.text_widget.tag_configure("current", foreground=CURRENT_COLOR, underline=True)
     
     def update_display(self, original_text, typed_text):
         self.text_widget.config(state="normal")
