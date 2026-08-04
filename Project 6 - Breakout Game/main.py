@@ -3,6 +3,7 @@ from config import *
 from models.ball import Ball
 from models.paddle import Paddle
 from models.brick import Brick
+from views.scoreboard import Scoreboard
 
 class Game:
     def __init__(self):
@@ -11,13 +12,14 @@ class Game:
         pygame.display.set_caption("Breakout Game")
         self.clock = pygame.time.Clock()
         self.running = True
+        self.game_over = False
         
         # Initialize game objects
         self.paddle = Paddle(SCREEN_WIDTH // 2, PADDLE_Y, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED)
         self.ball = Ball(BALL_START_X, BALL_START_Y, BALL_SIZE, BALL_SPEED)
         self.bricks = self.create_bricks()
-        self.score = 0
-        self.lives = 3
+
+        self.scoreboard = Scoreboard()
         
         self.paddle_direction = 0  # -1 for left, 1 for right, 0 for no movement
         
@@ -46,6 +48,36 @@ class Game:
         if keys[pygame.K_SPACE] and self.ball.stuck_to_paddle:
             self.ball.launch()
             
+    def handle_collisions(self):
+        "Handle colision"
+        #Ball and wall
+        if self.ball.x < 0 or self.ball.x + self.ball.size >= SCREEN_WIDTH:
+            self.ball.vx *= -1
+        
+        if self.ball.y <= 0:
+            self.ball.vy *= -1
+            
+        #ball and paddle
+        if self.ball.rect.colliderect(self.paddle.rect) and self.ball.vy > 0:
+            self.ball.vy *= -1
+            self.ball.y = self.paddle.y - self.ball.size
+            
+        #ball and bricks
+        for brick in self.bricks:
+            if brick.alive and self.ball.rect.colliderect(brick.rect):
+                if brick.hit():
+                    self.scoreboard.add_points(10)
+                self.ball.vy *= -1
+                break
+        
+        #balls go off screen
+        if self.ball.y > SCREEN_HEIGHT:
+            self.scoreboard.lives -= 1
+            if self.scoreboard.lives <= 0:
+                self.game_over = True
+            else:
+                self.reset_ball()    
+        
     def update(self, dt):
         "Update game state"
         self.paddle.update(dt, self.paddle_direction) #Update paddle
@@ -54,6 +86,8 @@ class Game:
         if self.ball.stuck_to_paddle:
             self.ball.x = self.paddle.x + self.paddle.width // 2 - self.ball.size // 2
             self.ball.rect.x = self.ball.x
+            
+        self.handle_collisions()
         
     def draw(self):
         "Draw the screen"
@@ -65,14 +99,41 @@ class Game:
         for brick in self.bricks:
             brick.draw(self.screen)
             
-        #Draw Score and Lives (temp)
-        font = pygame.font.Font(None, 36)
-        score_text = font.render(f"Score: {self.score}", True, WHITE)
-        lives_tex = font.render(f"Lives: {self.lives}", True, WHITE)
-        self.screen.blit(score_text, (10, 10))
-        self.screen.blit(lives_tex, (SCREEN_WIDTH - 150, 10))
+        #Draw Scoreboard
+        self.scoreboard.draw(self.screen)
+        
+        #Draw game over screen
+        if self.game_over:
+            self.scoreboard.draw_game_over(self.screen)
         
         pygame.display.flip()
+        
+    def reset_ball(self):
+        "Reset ball to paddle position"
+        self.ball.x = self.paddle.x + self.paddle.width // 2 - self.ball.size // 2
+        self.ball.y = PADDLE_Y - self.ball.size
+        self.ball.stuck_to_paddle = True
+        self.ball.vx = 0
+        self.ball.vy = 0
+        
+    def reset_game(self):
+        "Reset entire game"
+        self.game_over = False
+        
+        # Reset paddle
+        self.paddle.x = SCREEN_WIDTH // 2 - self.paddle.width // 2
+        self.paddle.rect.x = self.paddle.x
+        
+        # Reset ball
+        self.reset_ball()
+        
+        # Reset bricks
+        self.bricks = self.create_bricks()
+        
+        # Reset scoreboard
+        self.scoreboard.score = 0
+        self.scoreboard.lives = 3
+        self.scoreboard.level = 1
         
     def run(self):
         "Main loop"
@@ -82,11 +143,21 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.running = False
+                    if self.game_over:
+                        if event.key == pygame.K_SPACE:
+                            self.reset_game()
+                        if event.key == pygame.K_ESCAPE:
+                            self.running = False
             
-            self.handle_input()
-            self.update(dt)
+            
+            if not self.game_over:
+                self.handle_input()
+                self.update(dt)
+
             self.draw()
-        
         pygame.quit()
         
 if __name__ == "__main__":
