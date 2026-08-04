@@ -85,7 +85,7 @@ class Scoreboard:
         
         #Restart
         small_font = pygame.font.Font(None, 28)
-        restart_text = small_font.render("Press SPACE to restart or ESC to quit")
+        restart_text = small_font.render("Press SPACE to restart or ESC to quit", True, (255, 255, 255))
         restart_rect = restart_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 150))
         screen.blit(restart_text, restart_rect)
         

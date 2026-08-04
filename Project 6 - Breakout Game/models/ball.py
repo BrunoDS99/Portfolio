@@ -6,6 +6,7 @@ class Ball:
         self.y = y
         self.size = size
         self.speed = speed
+        self.base_speed = speed
         self.vx = 0
         self.vy = 0
         self.stuck_to_paddle = True

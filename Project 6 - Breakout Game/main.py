@@ -4,10 +4,13 @@ from models.ball import Ball
 from models.paddle import Paddle
 from models.brick import Brick
 from views.scoreboard import Scoreboard
+import os
 
 class Game:
     def __init__(self):
         pygame.init()
+        pygame.mixer.init()
+        self.sounds = self.load_sounds()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("Breakout Game")
         self.clock = pygame.time.Clock()
@@ -59,14 +62,16 @@ class Game:
             
         #ball and paddle
         if self.ball.rect.colliderect(self.paddle.rect) and self.ball.vy > 0:
-            self.ball.vy *= -1
-            self.ball.y = self.paddle.y - self.ball.size
-            
+            self.paddle.paddle_hit(self.ball)  # Call the physics hit
+            self.ball.y = self.paddle.y - self.ball.size  # Prevent sticking
+            self.sounds['bounce'].play()
+                            
         #ball and bricks
         for brick in self.bricks:
             if brick.alive and self.ball.rect.colliderect(brick.rect):
                 if brick.hit():
                     self.scoreboard.add_points(10)
+                    self.sounds['brick_break'].play()
                 self.ball.vy *= -1
                 break
         
@@ -75,6 +80,7 @@ class Game:
             self.scoreboard.lives -= 1
             if self.scoreboard.lives <= 0:
                 self.game_over = True
+                self.sounds['game_over'].play()
             else:
                 self.reset_ball()    
         
@@ -134,6 +140,21 @@ class Game:
         self.scoreboard.score = 0
         self.scoreboard.lives = 3
         self.scoreboard.level = 1
+        
+    def load_sounds(self):
+        sounds = {}
+        try:
+            sounds['bounce'] = pygame.mixer.Sound("sounds/bounce.wav")
+            sounds['brick_break'] = pygame.mixer.Sound("sounds/brick_break.wav")
+            sounds['game_over'] = pygame.mixer.Sound("sounds/game_over.wav")
+        except:
+            print("Sound files not found - playing without sound")
+            # Create dummy sounds that do nothing
+            sounds['bounce'] = None
+            sounds['brick_break'] = None
+            sounds['game_over'] = None
+        return sounds
+        
         
     def run(self):
         "Main loop"
