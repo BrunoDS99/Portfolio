@@ -16,6 +16,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.game_over = False
+        self.victory = False
         
         # Initialize game objects
         self.paddle = Paddle(SCREEN_WIDTH // 2, PADDLE_Y, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED)
@@ -82,7 +83,12 @@ class Game:
                 self.game_over = True
                 self.sounds['game_over'].play()
             else:
-                self.reset_ball()    
+                self.reset_ball() 
+        
+        #vicoty screen
+        all_bricks_destroyed = all(not brick.alive for brick in self.bricks)
+        if all_bricks_destroyed:
+            self.victory = True   
         
     def update(self, dt):
         "Update game state"
@@ -108,6 +114,10 @@ class Game:
         #Draw Scoreboard
         self.scoreboard.draw(self.screen)
         
+        #Draw victory screen if needed
+        if self.victory:
+            self.scoreboard.draw_victory(self.screen)
+            
         #Draw game over screen
         if self.game_over:
             self.scoreboard.draw_game_over(self.screen)
@@ -122,9 +132,13 @@ class Game:
         self.ball.vx = 0
         self.ball.vy = 0
         
+        self.ball.rect.x = self.ball.x
+        self.ball.rect.y = self.ball.y
+        
     def reset_game(self):
         "Reset entire game"
         self.game_over = False
+        self.victory = False
         
         # Reset paddle
         self.paddle.x = SCREEN_WIDTH // 2 - self.paddle.width // 2
@@ -140,6 +154,9 @@ class Game:
         self.scoreboard.score = 0
         self.scoreboard.lives = 3
         self.scoreboard.level = 1
+        
+        self.ball.speed = BALL_SPEED
+        self.paddle.speed = PADDLE_SPEED
         
     def load_sounds(self):
         sounds = {}
@@ -167,9 +184,16 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
+                    if self.victory:
+                        if event.key == pygame.K_ESCAPE:
+                            self.running = False
+                        if event.key == pygame.K_SPACE:
+                            self.reset_game()
+                            continue
                     if self.game_over:
                         if event.key == pygame.K_SPACE:
                             self.reset_game()
+                            continue
                         if event.key == pygame.K_ESCAPE:
                             self.running = False
             

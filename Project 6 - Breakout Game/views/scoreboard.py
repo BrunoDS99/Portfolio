@@ -88,4 +88,29 @@ class Scoreboard:
         restart_text = small_font.render("Press SPACE to restart or ESC to quit", True, (255, 255, 255))
         restart_rect = restart_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 150))
         screen.blit(restart_text, restart_rect)
+    
+    def draw_victory(self, screen):
+        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        overlay.set_alpha(128)
+        overlay.fill((0,0,0))
+        screen.blit(overlay, (0,0))
+        
+        #Victory text
+        big_font = pygame.font.Font(None, 72)
+        victory_text = big_font.render("Victory", True, (0, 255, 0))
+        victory_rect = victory_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 80))
+        screen.blit(victory_text, victory_rect)
+        
+        #Final Score
+        score_font = pygame.font.Font(None, 36)
+        score_text = score_font.render(f"Score: {self.score}", True, (255, 255, 255))
+        score_rect = score_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 +40))
+        screen.blit(score_text, score_rect)
+        
+        #High Score
+        high_text = score_font.render(f"High Score: {self.high_score}", True, (255, 255, 0))
+        high_rect = high_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 80))
+        screen.blit(high_text, high_rect)
+        
+        
         
