@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Cafe Finder - Your Favorite Cafes</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Find cafes with good coffee, WiFi, and power outlets.">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/img/favicon.ico') }}" type="image/x-icon">
+    
+    <!-- Main CSS (minified - faster loading) -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/main.min.css') }}">
+    
+    <!-- Your custom styles -->
+    <style>
+        .cafe-card {
+            transition: transform 0.2s;
+        }
+        .cafe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .badge-wifi { 
+            background-color: #28a745; 
+            color: white; 
+            padding: 5px 10px; 
+            border-radius: 4px; 
+            font-size: 12px;
+            display: inline-block;
+            margin: 2px;
+        }
+        .badge-sockets { 
+            background-color: #007bff; 
+            color: white; 
+            padding: 5px 10px; 
+            border-radius: 4px; 
+            font-size: 12px;
+            display: inline-block;
+            margin: 2px;
+        }
+        .badge-toilet { 
+            background-color: #17a2b8; 
+            color: white; 
+            padding: 5px 10px; 
+            border-radius: 4px; 
+            font-size: 12px;
+            display: inline-block;
+            margin: 2px;
+        }
+        .badge-calls { 
+            background-color: #ffc107; 
+            color: black; 
+            padding: 5px 10px; 
+            border-radius: 4px; 
+            font-size: 12px;
+            display: inline-block;
+            margin: 2px;
+        }
+        .loader { 
+            display: none; 
+        }
+        #collection-heading { 
+            margin-bottom: 20px; 
+            font-size: 24px; 
+            font-weight: bold; 
+        }
+        .scrollUp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+        }
+        #footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        #footer .social a {
+            margin: 0 10px;
+            color: #333;
+        }
+        .card-img-top {
+            height: 225px;
+            object-fit: cover;
+        }
+        .card-img-top-placeholder {
+            height: 225px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #6c757d;
+            color: white;
+        }
+        .card-img-top-placeholder i {
+            font-size: 4rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loader"></div>
+    
+    <header id="header">
+        <div class="collapse" id="navbarHeader">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-md-7 py-4">
+                        <h4>About Cafe Finder</h4>
+                        <p class="text-muted">
+                            Find the best cafes with great coffee, reliable WiFi, and power outlets 
+                            for when you need to work or study.
+                        </p>
+                    </div>
+                    <div class="col-sm-4 offset-md-1 py-4" id="contact-info">
+                        <h4>Navigation</h4>
+                        <ul class="list-unstyled">
+                            <li>
+                                <a href="/"><i class="fa fa-home"></i> Home</a>
+                            </li>
+                            <li>
+                                <a href="/add"><i class="fa fa-plus-circle"></i> Add a Cafe</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="navbar navbar-light box-shadow">
+            <div class="container d-flex justify-content-between">
+                <a class="navbar-brand" href="/" id="header-logo">
+                    <i class="fa fa-coffee" style="font-size: 24px;"></i> Cafe Finder
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" 
+                        aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" role="main">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <p class="copyright">Made with <i class="fa fa-heart"></i> by Cafe Finder &copy; 2024</p>
+        <div class="social">
+            <a href="#"><i class="fa fa-github"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+        </div>
+    </footer>
+
+    <!-- Main JS (jQuery + Bootstrap + plugins) -->
+    <script src="{{ url_for('static', filename='assets/js/main.min.js') }}"></script>
+    
+    <!-- Your custom script -->
+    <script src="{{ url_for('static', filename='assets/js/script.js') }}"></script>
+</body>
+
+</html>

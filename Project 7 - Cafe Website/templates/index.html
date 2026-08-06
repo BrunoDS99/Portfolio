@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="jumbotron text-center" id="mainBanner">
+    <div class="container">
+        <h1 class="jumbotron-heading">☕ Find Your Perfect Cafe</h1>
+        <p class="lead text-muted">
+            Discover cafes with great coffee, reliable WiFi, and power outlets 
+            for when you need to work, study, or just relax.
+        </p>
+        <p>
+            <a href="/add" class="btn btn-primary my-2">
+                <i class="fa fa-plus-circle"></i> Add a Cafe
+            </a>
+        </p>
+    </div>
+</section>
+
+<!-- Cafe Grid -->
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" id="collection-heading">
+                <span>All Cafes ({{ cafes|length }})</span>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for cafe in cafes %}
+            <div class="col-md-4">
+                <div class="card mb-4 box-shadow cafe-card">
+                    {% if cafe.img_url %}
+                    <img class="card-img-top" src="{{ cafe.img_url }}" alt="{{ cafe.name }}" style="height: 225px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 225px; color: white;">
+                        <i class="fa fa-coffee" style="font-size: 4rem;"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ cafe.name }}</h5>
+                        <p class="card-text">
+                            <i class="fa fa-map-marker"></i> {{ cafe.location }}
+                        </p>
+                        <div class="mb-2">
+                            {% if cafe.has_wifi %}
+                            <span class="badge-wifi"><i class="fa fa-wifi"></i> WiFi</span>
+                            {% endif %}
+                            {% if cafe.has_sockets %}
+                            <span class="badge-sockets"><i class="fa fa-plug"></i> Sockets</span>
+                            {% endif %}
+                            {% if cafe.has_toilet %}
+                            <span class="badge-toilet"><i class="fa fa-restroom"></i> Toilet</span>
+                            {% endif %}
+                            {% if cafe.can_take_calls %}
+                            <span class="badge-calls"><i class="fa fa-phone"></i> Calls OK</span>
+                            {% endif %}
+                        </div>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <i class="fa fa-money"></i> {{ cafe.coffee_price }}
+                                {% if cafe.seats %}
+                                | <i class="fa fa-chair"></i> {{ cafe.seats }}
+                                {% endif %}
+                            </small>
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                {% if cafe.map_url %}
+                                <a href="{{ cafe.map_url }}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fa fa-map"></i> Map
+                                </a>
+                                {% endif %}
+                                <a href="/delete/{{ cafe.id }}" class="btn btn-sm btn-outline-danger" 
+                                   onclick="return confirm('Delete {{ cafe.name }}?')">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </div>
+                            <small class="text-muted">#{{ cafe.id }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<a href="#" class="btn btn-primary scrollUp">
+    <i class="fa fa-arrow-circle-o-up"></i>
+</a>
+{% endblock %}

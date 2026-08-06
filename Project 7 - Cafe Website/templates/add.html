@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fa fa-plus-circle"></i> Add a New Cafe</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name">Cafe Name *</label>
+                                        <input type="text" class="form-control" id="name" name="name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="location">Location *</label>
+                                        <input type="text" class="form-control" id="location" name="location" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="map_url">Google Maps URL</label>
+                                <input type="url" class="form-control" id="map_url" name="map_url" 
+                                       placeholder="https://maps.google.com/...">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="img_url">Image URL</label>
+                                <input type="url" class="form-control" id="img_url" name="img_url" 
+                                       placeholder="https://example.com/image.jpg">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="coffee_price">Coffee Price</label>
+                                        <input type="text" class="form-control" id="coffee_price" name="coffee_price" 
+                                               placeholder="£3.50">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="seats">Seats</label>
+                                        <input type="text" class="form-control" id="seats" name="seats" 
+                                               placeholder="10-20">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Amenities</label>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="has_wifi" name="has_wifi">
+                                            <label class="form-check-label" for="has_wifi">
+                                                <i class="fa fa-wifi"></i> WiFi
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="has_sockets" name="has_sockets">
+                                            <label class="form-check-label" for="has_sockets">
+                                                <i class="fa fa-plug"></i> Sockets
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="has_toilet" name="has_toilet">
+                                            <label class="form-check-label" for="has_toilet">
+                                                <i class="fa fa-restroom"></i> Toilet
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="can_take_calls" name="can_take_calls">
+                                            <label class="form-check-label" for="can_take_calls">
+                                                <i class="fa fa-phone"></i> Calls OK
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-plus-circle"></i> Add Cafe
+                            </button>
+                            <a href="/" class="btn btn-secondary">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
