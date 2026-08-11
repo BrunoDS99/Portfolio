@@ -97,6 +97,42 @@
         .card-img-top-placeholder i {
             font-size: 4rem;
         }
+        /* Flash message styles */
+        .alert {
+            border-radius: 4px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        /* Floating login button */
+        .floating-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 999;
+            border-radius: 50px;
+            padding: 12px 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 
@@ -113,6 +149,11 @@
                             Find the best cafes with great coffee, reliable WiFi, and power outlets 
                             for when you need to work or study.
                         </p>
+                        {% if current_user.is_authenticated %}
+                        <p class="text-muted">
+                            <i class="fa fa-user"></i> Logged in as: <strong>{{ current_user.username }}</strong>
+                        </p>
+                        {% endif %}
                     </div>
                     <div class="col-sm-4 offset-md-1 py-4" id="contact-info">
                         <h4>Navigation</h4>
@@ -120,28 +161,74 @@
                             <li>
                                 <a href="/"><i class="fa fa-home"></i> Home</a>
                             </li>
+                            {% if current_user.is_authenticated %}
                             <li>
                                 <a href="/add"><i class="fa fa-plus-circle"></i> Add a Cafe</a>
                             </li>
+                            <li>
+                                <a href="/scrape"><i class="fa fa-robot"></i> Auto-Scrape</a>
+                            </li>
+                            <li>
+                                <a href="/logout"><i class="fa fa-sign-out"></i> Logout</a>
+                            </li>
+                            {% else %}
+                            <li>
+                                <a href="/login"><i class="fa fa-sign-in"></i> Admin Login</a>
+                            </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
         <div class="navbar navbar-light box-shadow">
-            <div class="container d-flex justify-content-between">
+            <div class="container d-flex justify-content-between align-items-center">
                 <a class="navbar-brand" href="/" id="header-logo">
                     <i class="fa fa-coffee" style="font-size: 24px;"></i> Cafe Finder
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" 
-                        aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <div class="d-flex align-items-center">
+                    {% if current_user.is_authenticated %}
+                    <span class="badge badge-success mr-2">
+                        <i class="fa fa-user"></i> Admin
+                    </span>
+                    <a href="/scrape" class="btn btn-sm btn-outline-info mr-2">
+                        <i class="fa fa-robot"></i> Scrape
+                    </a>
+                    <a href="/logout" class="btn btn-sm btn-outline-danger mr-2">
+                        <i class="fa fa-sign-out"></i> Logout
+                    </a>
+                    {% else %}
+                    <a href="/login" class="btn btn-sm btn-primary mr-2">
+                        <i class="fa fa-sign-in"></i> Login
+                    </a>
+                    {% endif %}
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" 
+                            aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
 
     <main id="main" role="main">
+        <!-- Flash Messages -->
+        <div class="container mt-3">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            <i class="fa fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-circle{% elif category == 'info' %}info-circle{% else %}warning{% endif %}"></i>
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
         {% block content %}
         {% endblock %}
     </main>
@@ -155,11 +242,41 @@
         </div>
     </footer>
 
-    <!-- Main JS (jQuery + Bootstrap + plugins) -->
-    <script src="{{ url_for('static', filename='assets/js/main.min.js') }}"></script>
-    
+    <!-- Floating Login/Logout Button -->
+    {% if not current_user.is_authenticated %}
+    <a href="/login" class="btn btn-primary floating-btn">
+        <i class="fa fa-lock"></i> Admin Login
+    </a>
+    {% else %}
+    <a href="/logout" class="btn btn-danger floating-btn">
+        <i class="fa fa-sign-out"></i> Logout ({{ current_user.username }})
+    </a>
+    {% endif %}
+
+    <!-- jQuery first -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
     <!-- Your custom script -->
     <script src="{{ url_for('static', filename='assets/js/script.js') }}"></script>
+    
+    <!-- Auto-dismiss alerts after 5 seconds -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    alert.style.transition = 'opacity 0.5s';
+                    alert.style.opacity = '0';
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 500);
+                });
+            }, 5000);
+        });
+    </script>
 </body>
 
 </html>

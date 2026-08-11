@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0"><i class="fa fa-robot"></i> Auto-Scrape Cafes</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Enter a location to automatically find cafes from OpenStreetMap.
+                    All cafes found will be added to your database.
+                </p>
+                
+                <form method="POST">
+                    <div class="form-group">
+                        <label for="location">Location *</label>
+                        <input type="text" class="form-control" id="location" name="location" 
+                               placeholder="e.g., Lisbon, Portugal or 38.7223,-9.1393" required>
+                        <small class="form-text text-muted">
+                            Enter a city name, address, or coordinates
+                        </small>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="radius">Search Radius (meters)</label>
+                                <input type="number" class="form-control" id="radius" name="radius" 
+                                       value="5000" min="500" max="50000">
+                                <small class="form-text text-muted">Default: 5,000m (5km)</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="max_results">Max Results</label>
+                                <input type="number" class="form-control" id="max_results" name="max_results" 
+                                       value="20" min="1" max="60">
+                                <small class="form-text text-muted">Max 60 per search</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <i class="fa fa-info-circle"></i> 
+                        <strong>How it works:</strong>
+                        <ul class="mb-0 mt-1">
+                            <li>Uses <strong>OpenStreetMap</strong> - 100% free, no credit card needed</li>
+                            <li>Searches for cafes, coffee shops, pastelarias, and confeitarias</li>
+                            <li>Automatically adds WiFi, sockets, and toilet info when available</li>
+                            <li>No rate limits - search as much as you want!</li>
+                        </ul>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-search"></i> Scrape Cafes
+                    </button>
+                    <a href="/" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5><i class="fa fa-lightbulb-o"></i> Example Locations</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <button class="btn btn-sm btn-outline-primary mb-1 w-100" onclick="document.getElementById('location').value='Lisbon, Portugal'">
+                            🇵🇹 Lisbon
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-sm btn-outline-primary mb-1 w-100" onclick="document.getElementById('location').value='Porto, Portugal'">
+                            🇵🇹 Porto
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-sm btn-outline-primary mb-1 w-100" onclick="document.getElementById('location').value='Coimbra, Portugal'">
+                            🇵🇹 Coimbra
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-sm btn-outline-primary mb-1 w-100" onclick="document.getElementById('location').value='Braga, Portugal'">
+                            🇵🇹 Braga
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-sm btn-outline-primary mb-1 w-100" onclick="document.getElementById('location').value='Faro, Portugal'">
+                            🇵🇹 Faro
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-sm btn-outline-primary mb-1 w-100" onclick="document.getElementById('location').value='Aveiro, Portugal'">
+                            🇵🇹 Aveiro
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-sm btn-outline-primary mb-1 w-100" onclick="document.getElementById('location').value='Setúbal, Portugal'">
+                            🇵🇹 Setúbal
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-sm btn-outline-primary mb-1 w-100" onclick="document.getElementById('location').value='Évora, Portugal'">
+                            🇵🇹 Évora
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-sm btn-outline-primary mb-1 w-100" onclick="document.getElementById('location').value='38.7223,-9.1393'">
+                            📍 Coordinates
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5><i class="fa fa-question-circle"></i> Tips for Best Results</h5>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    <li><strong>Use specific locations:</strong> "Lisbon, Portugal" works better than just "Lisbon"</li>
+                    <li><strong>Increase radius:</strong> If you get few results, try 10,000m (10km)</li>
+                    <li><strong>Portuguese places:</strong> Finds cafes, pastelarias, confeitarias, and snack bars</li>
+                    <li><strong>Manual updates:</strong> After scraping, edit cafes to add amenities if missing</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
