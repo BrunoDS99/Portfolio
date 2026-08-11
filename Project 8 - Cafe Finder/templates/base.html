@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>☕ Cafe Finder - Find Your Perfect Cafe</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Find cafes with great coffee, reliable WiFi, and power outlets near you.">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/img/favicon.ico') }}" type="image/x-icon">
+    
+    <!-- Main CSS (from your existing static folder) -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/main.min.css') }}">
+    
+    <!-- Font Awesome (if not already in main.min.css) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            padding-bottom: 60px;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background-color: white !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 12px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #2d3436 !important;
+        }
+        
+        .navbar-brand i {
+            color: #6c5ce7;
+        }
+        
+        /* Footer */
+        .site-footer {
+            background-color: white;
+            border-top: 1px solid #e9ecef;
+            padding: 20px 0;
+            margin-top: 40px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        .site-footer p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .site-footer a {
+            color: #6c5ce7;
+            text-decoration: none;
+        }
+        
+        .site-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Flash Messages */
+        .alert {
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin-bottom: 16px;
+            border: none;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        /* Responsive tweaks */
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.1rem;
+            }
+            .site-footer {
+                position: relative;
+                margin-top: 30px;
+            }
+            body {
+                padding-bottom: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fa fa-coffee"></i> Cafe Finder
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fa fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="document.getElementById('searchInput').focus(); return false;">
+                            <i class="fa fa-search"></i> Search
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="getUserLocation(); return false;">
+                            <i class="fa fa-location-arrow"></i> Near Me
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com" target="_blank">
+                            <i class="fa fa-github"></i> GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 20px; padding-bottom: 20px;">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        <i class="fa fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-circle{% elif category == 'info' %}info-circle{% else %}warning{% endif %}"></i>
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Content Block -->
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container text-center">
+            <p>
+                <i class="fa fa-coffee"></i> Made with love &bull; 
+                Data from <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a> &bull;
+                <a href="/">Cafe Finder</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Main JS (from your existing static folder) -->
+    <script src="{{ url_for('static', filename='assets/js/main.min.js') }}"></script>
+    
+    <!-- Your custom script (from your existing static folder) -->
+    <script src="{{ url_for('static', filename='assets/js/script.js') }}"></script>
+    
+    <!-- Global functions -->
+    <script>
+        // Get user location function (available globally)
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        window.location.href = `/search?location=${lat},${lng}&radius=3000`;
+                    },
+                    function() {
+                        alert('Could not get your location. Please enter it manually.');
+                    }
+                );
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+        
+        // Auto-dismiss alerts after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    alert.style.transition = 'opacity 0.5s';
+                    alert.style.opacity = '0';
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 500);
+                });
+            }, 5000);
+        });
+    </script>
+    
+    <!-- Block for page-specific scripts -->
+    {% block scripts %}
+    {% endblock %}
+</body>
+
+</html>

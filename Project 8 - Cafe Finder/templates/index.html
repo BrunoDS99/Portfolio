@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Map Section with Overlaid Search -->
+<div style="position: relative; height: 500px; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 15px rgba(0,0,0,0.1); margin-bottom: 30px;">
+    
+    <!-- The Map -->
+    <div id="map" style="height: 100%; width: 100%;"></div>
+    
+    <!-- Search Overlay -->
+    <div style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 700px; z-index: 1000;">
+        <div style="background: rgba(255,255,255,0.95); border-radius: 50px; padding: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+            <form action="/search" method="GET" class="d-flex" style="margin: 0;">
+                <input type="text" name="location" id="searchInput" class="form-control" 
+                       placeholder="Search for cafes in a city, address, or coordinates..." 
+                       style="border: none; padding: 12px 20px; font-size: 16px; border-radius: 50px 0 0 50px;"
+                       value="{{ location or '' }}" required>
+                <button type="submit" class="btn btn-primary" 
+                        style="border-radius: 0 50px 50px 0; padding: 12px 30px; white-space: nowrap;">
+                    <i class="fa fa-search"></i> Find Cafes
+                </button>
+            </form>
+        </div>
+        <div class="mt-2 text-center">
+            <small style="color: white; text-shadow: 0 1px 5px rgba(0,0,0,0.5);">
+                <i class="fa fa-location-arrow"></i> 
+                <a href="#" onclick="getUserLocation(); return false;" style="color: white; text-decoration: underline;">
+                    Use my current location
+                </a>
+                &nbsp;·&nbsp; Try: "Lisbon, Portugal" or "40.7128,-74.0060"
+            </small>
+        </div>
+    </div>
+</div>
+
+<!-- Results Grid -->
+<div class="container">
+    {% if cafes and cafes|length > 0 %}
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h2>
+                    <i class="fa fa-coffee"></i> Found {{ cafes|length }} cafes 
+                    {% if location %}near "{{ location }}"{% endif %}
+                </h2>
+                <p class="text-muted">
+                    <i class="fa fa-info-circle"></i> Click a marker on the map or a card below for details.
+                </p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for cafe in cafes %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 cafe-card">
+                    {% if cafe.img_url %}
+                    <img class="card-img-top" src="{{ cafe.img_url }}" alt="{{ cafe.name }}" style="height: 140px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 140px; background-color: #6c757d; color: white;">
+                        <i class="fa fa-coffee" style="font-size: 3rem;"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h6 class="card-title">{{ cafe.name }}</h6>
+                        <p class="card-text" style="font-size: 12px; color: #666;">
+                            <i class="fa fa-map-marker"></i> {{ cafe.location }}
+                        </p>
+                        <div style="font-size: 11px;">
+                            {% if cafe.has_wifi %}
+                            <span class="badge badge-wifi"><i class="fa fa-wifi"></i> WiFi</span>
+                            {% endif %}
+                            {% if cafe.has_sockets %}
+                            <span class="badge badge-sockets"><i class="fa fa-plug"></i> Sockets</span>
+                            {% endif %}
+                            {% if cafe.has_toilet %}
+                            <span class="badge badge-toilet"><i class="fa fa-restroom"></i> Toilet</span>
+                            {% endif %}
+                        </div>
+                        {% if cafe.coffee_price %}
+                        <small class="text-muted mt-1 d-block">
+                            <i class="fa fa-money"></i> {{ cafe.coffee_price }}
+                        </small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% elif cafes is defined and cafes|length == 0 and location %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning">
+                    <i class="fa fa-exclamation-triangle"></i> No cafes found near "{{ location }}". 
+                    <a href="/" class="alert-link">Try another location</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <!-- Default empty state -->
+        <div class="row">
+            <div class="col-md-12 text-center" style="padding: 60px 0;">
+                <i class="fa fa-search" style="font-size: 4rem; color: #ddd;"></i>
+                <h3 class="mt-3">Find Your Perfect Cafe</h3>
+                <p class="text-muted">Search above to discover cafes with great coffee, WiFi, and power outlets near you.</p>
+                <div class="mt-3">
+                    <a href="/search?location=Lisbon, Portugal" class="badge badge-secondary p-2 mr-2" style="text-decoration: none;">🇵🇹 Lisbon</a>
+                    <a href="/search?location=London, UK" class="badge badge-secondary p-2 mr-2" style="text-decoration: none;">🇬🇧 London</a>
+                    <a href="/search?location=New York, NY" class="badge badge-secondary p-2 mr-2" style="text-decoration: none;">🇺🇸 New York</a>
+                    <a href="/search?location=Tokyo, Japan" class="badge badge-secondary p-2" style="text-decoration: none;">🇯🇵 Tokyo</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Map JavaScript -->
+<script>
+    // Cafe data from server - always defined
+    
+    const cafes = {{ cafes|tojson|safe }};
+    const mapCenter = {{ map_center|tojson|safe }};
+    const searchLocation = {{ location|tojson|safe }};
+    
+    console.log('Cafes loaded:', cafes.length);
+    
+    // Initialize map
+    let map = L.map('map');
+    
+    // Set view based on location or default
+    if (mapCenter && mapCenter.lat && mapCenter.lng) {
+        map.setView([mapCenter.lat, mapCenter.lng], 15);
+    } else {
+        map.setView([40.7128, -74.0060], 13);
+    }
+    
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    
+    // Add user location marker if available (from geolocation)
+    {% if user_location is defined %}
+    const userIcon = L.divIcon({
+        html: '<i class="fa fa-user" style="font-size:24px;color:#007bff;background:white;border-radius:50%;padding:5px;border:2px solid #007bff;"></i>',
+        iconSize: [30, 30],
+        className: 'user-location-marker'
+    });
+    L.marker([{{ user_location.lat }}, {{ user_location.lng }}], {icon: userIcon})
+        .addTo(map)
+        .bindPopup('<strong>📍 You are here</strong>');
+    {% endif %}
+    
+    // Add cafe markers
+    if (cafes.length > 0) {
+        const markers = [];
+        
+        cafes.forEach(cafe => {
+            if (cafe.lat && cafe.lon) {
+                const popupContent = `
+                    <strong>${cafe.name}</strong><br>
+                    ${cafe.location}<br>
+                    ${cafe.has_wifi ? '✅ WiFi' : ''} ${cafe.has_sockets ? '✅ Sockets' : ''}
+                    ${cafe.coffee_price ? `<br>${cafe.coffee_price}` : ''}
+                    <br><a href="${cafe.map_url || '#'}" target="_blank">View on Map</a>
+                `;
+                
+                const marker = L.marker([cafe.lat, cafe.lon])
+                    .addTo(map)
+                    .bindPopup(popupContent);
+                
+                markers.push([cafe.lat, cafe.lon]);
+            }
+        });
+        
+        // Fit map to show all markers
+        if (markers.length > 0) {
+            const bounds = L.latLngBounds(markers);
+            map.fitBounds(bounds.pad(0.1));
+        }
+    }
+    
+    // Scroll to results when cafes are loaded
+    if (cafes.length > 0) {
+        setTimeout(function() {
+            const results = document.querySelector('.container');
+            if (results) {
+                results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 500);
+    }
+</script>
+
+<style>
+    .user-location-marker {
+        background: none !important;
+        border: none !important;
+    }
+    .cafe-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+        cursor: pointer;
+    }
+    .cafe-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+    .badge-wifi { background: #28a745; color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; }
+    .badge-sockets { background: #007bff; color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; }
+    .badge-toilet { background: #17a2b8; color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; }
+    .badge-calls { background: #ffc107; color: black; padding: 2px 8px; border-radius: 12px; font-size: 10px; }
+    #map {
+        z-index: 1;
+    }
+</style>
+{% endblock %}
