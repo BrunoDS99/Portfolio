@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>☕ Cafe Finder - Find Your Perfect Cafe</title>
+    <title>☕ Cafe finder - Find your cafe</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,10 +11,8 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='assets/img/favicon.ico') }}" type="image/x-icon">
     
-    <!-- Main CSS (from your existing static folder) -->
+    <!-- Main CSS -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/main.min.css') }}">
-    
-    <!-- Font Awesome (if not already in main.min.css) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
     <!-- Google Fonts -->
@@ -124,7 +122,7 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <i class="fa fa-coffee"></i> Cafe Finder
+                <i class="fa fa-coffee"></i> Cafe finder
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" 
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -190,15 +188,13 @@
         </div>
     </footer>
 
-    <!-- Main JS (from your existing static folder) -->
+    <!-- JS -->
     <script src="{{ url_for('static', filename='assets/js/main.min.js') }}"></script>
-    
-    <!-- Your custom script (from your existing static folder) -->
     <script src="{{ url_for('static', filename='assets/js/script.js') }}"></script>
     
     <!-- Global functions -->
     <script>
-        // Get user location function (available globally)
+        // Get user location function
         function getUserLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
