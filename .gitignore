@@ -69,3 +69,21 @@ htmlcov/
 # Type checking
 .mypy_cache/
 .dmypy.json
+
+# Large data files
+data/*.npy
+data/*.npz
+
+# Training scripts (not needed in production)
+src/preprocess_data.py
+src/train_model.py
+
+# Visualizations
+visualizations/
+
+# Training checkpoint (keep only final model)
+models/best_model.h5
+
+# Keep important files
+!data/cat_breeds.json
+!models/cat_breed_model.h5
