@@ -5,7 +5,7 @@ import json
 from PIL import Image
 
 class CatBreedClassifier: #Identidy cat breeds from images
-    def __init__(self, model_path = 'models/cat_breed_model.h5', breeds_path='data/cat_breeds.json'):
+    def __init__(self, model_path = 'models/cat_breed_model.keras', breeds_path='data/cat_breeds.json'):
         print("Loading the model")
         self.model = tf.keras.models.load_model(model_path)
         
