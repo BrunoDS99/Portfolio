@@ -21,30 +21,26 @@ dist/
 .ipynb_checkpoints/
 *.ipynb
 
-# Model files (large binary files)
-models/*.h5
-models/*.keras
-models/*.pkl
-models/*.pb
-models/*.tflite
-
-# Data files (large numpy arrays)
+# Training data files (large numpy arrays - NOT needed for deployment)
 data/*.npy
 data/*.npz
 data/raw/
 data/processed/
 
-# Keep cat_breeds.json (small file)
+# KEEP cat_breeds.json (small file needed for predictions)
 !data/cat_breeds.json
 
-# Generated images for breed gallery
+# Training scripts (not needed in production)
+src/preprocess_data.py
+src/train_model.py
+
+# Visualizations (not needed in production)
+visualizations/
+
+# Generated images (if using external URLs)
 app/static/images/breeds/*.jpg
 app/static/images/breeds/*.jpeg
 app/static/images/breeds/*.png
-
-# Visualizations
-visualizations/*.png
-visualizations/*.jpg
 
 # IDE
 .vscode/
@@ -64,3 +60,12 @@ logs/
 # Environment variables
 .env
 .env.local
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
